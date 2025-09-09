@@ -141,6 +141,15 @@ npm run dev
 │   └── public/            # Static assets
 ```
 
+## Project Showcase
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/f3054059-e08b-4aac-947f-3ec0fee0b791" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/c5f9edf9-09f3-401f-ae1b-41bb48347800" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/e21db1af-439d-49b3-bb61-716a51b69b2e" />
+<img width="1920" height="1080" alt="image" src="https://github.com/user-attachments/assets/b15fb221-16c9-4c1d-9923-9b2aafd76a40" />
+
+
+
+
 ## Contributing
 
 1. Fork the repository

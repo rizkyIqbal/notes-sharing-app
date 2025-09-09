@@ -7,10 +7,10 @@ services:
       dockerfile: Dockerfile
     container_name: notes-sharing-app-fe
     ports:
-      - "3000:3000"
-    # environment:
-    #   - NEXT_PUBLIC_API_URL=http://backend:4000
-    # commands : "npm start"
+      - "3001:3000"
+    restart: always
+    volumes:
+      - ./notes-sharing-app-fe/src:/app/src
     depends_on:
       - backend
     networks:
@@ -23,9 +23,11 @@ services:
     container_name: notes-sharing-app-be
     ports:
       - "4000:4000"
-    # environment:
-    #   - DATABASE_URL=postgres://postgres:postgres@db:5432/mydb?sslmode=disable
-    # commands : "go run cmd/server/main.go"
+    env_file:
+      - ./notes-sharing-app-be/.env
+    volumes:
+      - ./notes-sharing-app-be/keys:/app/keys
+    command: ./server
     depends_on:
       - db
     networks:
@@ -38,7 +40,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: db_notes
+      POSTGRES_DB: db_postgres
     ports:
       - "5432:5432"
     volumes:

@@ -4,12 +4,11 @@ import { Input } from "@/components/ui/input";
 import { NotesCard } from "@/components/visitor/notes-card";
 import { useEffect, useState } from "react";
 import { Note } from "@/types/note";
-import { fetchNotesByUserID, fetchNotes } from "@/helper/notes.helper";
+import { fetchNotesByUserID } from "@/helper/notes.helper";
 
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -36,16 +35,13 @@ export default function MyNotes() {
       }
     }
     loadNotes();
-  }, [page]);
+  }, [page, limit]);
 
   const handlePageClick = (newPage: number) => {
     setPage(newPage);
   };
 
-  return (
-    // <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-    <div className="font-sans min-h-screen p-8 w-full">
-      {/* <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start"> */}
+  return (<div className="font-sans min-h-screen p-8 w-full">
       <main className="">
         <p className="text-3xl">My Notes</p>
         <div className="mt-4 flex gap-4">

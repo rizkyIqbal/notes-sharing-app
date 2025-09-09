@@ -23,7 +23,7 @@ export async function fetchNotes(
 
     setNotes(result.notes);
     return result;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Failed to fetch notes:", error);
     return null;
   }
@@ -38,7 +38,7 @@ export async function fetchNoteByID(
     const note = response.data ?? null;
     setNote(note);
     return note;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Failed to fetch note by ID:", error);
     setNote(null);
     return null;
@@ -71,7 +71,7 @@ export async function fetchNotesByUserID(
 
     setNotes(notes);
     return { notes, total, page: currentPage, limit: currentLimit };
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Failed to fetch notes by user ID:", error);
     setNotes([]);
     return null;
@@ -81,7 +81,7 @@ export async function fetchNotesByUserID(
 export async function createNoteHelper(
   newNote: { title: string; content: string },
   onSuccess?: (note: Note) => void,
-  onError?: (error: any) => void
+  onError?: (error: Error) => void
 ): Promise<Note | null> {
   try {
     const response = await noteService.createNote(newNote);
@@ -90,9 +90,12 @@ export async function createNoteHelper(
       return response.data;
     }
     return null;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Failed to create note:", error);
-    onError?.(error);
+    if (onError) {
+      if (error instanceof Error) onError(error);
+      else onError(new Error("Unknown error occurred"));
+    }
     return null;
   }
 }
@@ -101,18 +104,20 @@ export async function updateNoteHelper(
   id: string,
   newNote: { title: string; content: string },
   onSuccess?: () => void,
-  onError?: (error: any) => void
+  onError?: (error: Error) => void
 ): Promise<Note | null> {
   try {
     const response = await noteService.updateNote(id, newNote);
     if (response.status === 200) {
       onSuccess?.();
-      // return response.data;  
     }
     return null;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Failed to update note:", error);
-    onError?.(error);
+    if (onError) {
+      if (error instanceof Error) onError(error);
+      else onError(new Error("Unknown error occurred"));
+    }
     return null;
   }
 }
@@ -120,7 +125,7 @@ export async function updateNoteHelper(
 export async function deleteNoteHelper(
   id: string,
   onSuccess?: (note: Note) => void,
-  onError?: (error: any) => void
+  onError?: (error: Error) => void
 ): Promise<Note | null> {
   try {
     const response = await noteService.deleteNote(id);
@@ -129,9 +134,12 @@ export async function deleteNoteHelper(
       return response.data;
     }
     return null;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error("Failed to delete note:", error);
-    onError?.(error);
+    if (onError) {
+      if (error instanceof Error) onError(error);
+      else onError(new Error("Unknown error occurred"));
+    }
     return null;
   }
 }

@@ -38,7 +38,7 @@ export default function UpdateNote() {
   const [content, setContent] = useState("");
   const [user, setUser] = useState<User | null>(null);
   const [images, setImages] = useState<NoteImage[]>([]);
-  const [loadingImage, setLoadingImage] = useState(true);
+  // const [loadingImage, setLoadingImage] = useState(true);
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [selectedImage, setSelectedImage] = useState<NoteImage | null>(null);
   const [files, setFiles] = useState<File[]>([]);
@@ -82,9 +82,10 @@ export default function UpdateNote() {
         setImages(res);
       } catch (err) {
         console.error("Error fetching images:", err);
-      } finally {
-        setLoadingImage(false);
       }
+      // finally {
+      //   setLoadingImage(false);
+      // }
     }
 
     fetchImages();
@@ -139,8 +140,12 @@ export default function UpdateNote() {
         setImages((prev) => prev.filter((img) => img.id !== selectedImage.id));
         setSelectedImage(null);
       });
-    } catch (err: any) {
-      toast.error("Error deleting image: " + err.message);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        toast.error("Error deleting image: " + err.message);
+      } else {
+        toast.error("Error deleting image");
+      }
     }
   }
 
@@ -150,7 +155,8 @@ export default function UpdateNote() {
     <div className="font-sans min-h-screen p-8 w-full">
       <p className="text-3xl">Note - Update Note</p>
       <Separator className="my-4" />
-      <div className="flex w-full gap-6">
+        <p>Author : {user?.username}</p>
+      <div className="flex w-full gap-6 mt-6">
         <form onSubmit={handleSubmit} className="min-w-sm">
           <div className="mb-5">
             <label

@@ -8,7 +8,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 export default function Login() {
-    const router = useRouter();
+  const router = useRouter();
 
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -24,18 +24,18 @@ export default function Login() {
       const response = await loginUser(username, password);
       console.log("Login success:", response);
 
-      // toast("Login Succes, Welcome Back !", username);
       toast.success("Login Success", {
         description: `Welcome back, ${username}!`,
       });
 
-      // Example: store token if API returns one
-      // localStorage.setItem("token", response.token);
-
       router.push("/");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setError(err || "Login failed");
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Login failed");
+      }
     } finally {
       setLoading(false);
     }

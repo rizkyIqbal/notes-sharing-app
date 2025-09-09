@@ -1,5 +1,4 @@
-// image.helper.ts
-import api from "@/lib/services/api"; // your axios instance
+import api from "@/lib/services/api";
 import { NoteImage } from "@/types/noteImage";
 
 export async function uploadToGmbr(file: File) {
@@ -35,7 +34,7 @@ export async function getNoteImages(noteId: string): Promise<NoteImage[]> {
 export async function deleteNoteImage(
   imageId: string,
   onSuccess?: (res: { message: string }) => void,
-  onError?: (err: any) => void
+  onError?: (err: unknown) => void
 ) {
   try {
     const res = await api.delete(`/notes/images/${imageId}`);

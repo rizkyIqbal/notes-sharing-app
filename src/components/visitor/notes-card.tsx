@@ -13,7 +13,7 @@ type NotesCardProps = {
 };
 
 export function NotesCard({ note }: NotesCardProps) {
-  const [loading, setLoading] = useState(true);
+  // const [loading, setLoading] = useState(true);
   const [totalImages, setTotalImages] = useState<number>(0);
   useEffect(() => {
     async function fetchImages() {
@@ -22,9 +22,10 @@ export function NotesCard({ note }: NotesCardProps) {
         setTotalImages(res?.length ?? 0);
       } catch (err) {
         console.error("Error fetching images:", err);
-      } finally {
-        setLoading(false);
-      }
+      } 
+      // finally {
+      //   setLoading(false);
+      // }
     }
 
     fetchImages();

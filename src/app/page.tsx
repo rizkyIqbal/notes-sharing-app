@@ -9,7 +9,6 @@ import { fetchNotes } from "@/helper/notes.helper";
 import {
   Pagination,
   PaginationContent,
-  PaginationEllipsis,
   PaginationItem,
   PaginationLink,
   PaginationNext,
@@ -35,8 +34,7 @@ export default function Home() {
       }
     }
     loadNotes();
-    console.log(notes);
-  }, [page]);
+  }, [page, limit]);
 
   const handlePageClick = (newPage: number) => {
     setPage(newPage);

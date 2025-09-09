@@ -1,6 +1,6 @@
 "use client";
 
-import { Calendar, ChevronUp, Home, Inbox, User2 } from "lucide-react";
+import { ChevronUp, Home, Inbox, User2 } from "lucide-react";
 
 import {
   Sidebar,
@@ -27,8 +27,8 @@ import Link from "next/link";
 import { Button } from "../ui/button";
 import { logoutUser } from "@/helper/auth.helper";
 import { useRouter } from "next/navigation";
+import { AxiosError } from "axios";
 
-// Menu items.
 const items = [
   {
     title: "All Notes",
@@ -48,11 +48,14 @@ export function AppSidebar() {
   useEffect(() => {
     async function loadUser() {
       try {
-        const data = await fetchUserByID(setUser);
-        // if (data) setUser(data);
-      } catch (error: any) {
-        if (error.response?.status === 401) {
-          setUser(null);
+        await fetchUserByID(setUser);
+      } catch (error: unknown) {
+        if (error instanceof AxiosError) {
+          if (error.response?.status === 401) {
+            setUser(null);
+          }
+        } else {
+          console.error("Unexpected error:", error);
         }
       }
     }

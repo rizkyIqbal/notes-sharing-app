@@ -48,8 +48,9 @@ export default function NoteDetail() {
       try {
         const data = await fetchUserByID(setUser);
         console.log("Logged user:", data);
-      } catch (error: any) {
-        if (error.response?.status === 401) {
+      } catch (error) {
+        const err = error as { response?: { status: number }; message?: string };
+        if (err.response?.status === 401) {
           console.log("No user logged in");
         } else {
           console.error("Failed to fetch logged user:", error);
@@ -155,7 +156,7 @@ export default function NoteDetail() {
       <p>{note.content}</p>
       <div className="flex gap-4">
         {(images ?? []).map((img) => (
-          <Image width={200} key={img.id} src={img.image_path} />
+          <Image alt="image" width={200} key={img.id} src={img.image_path} />
         ))}
       </div>
     </div>

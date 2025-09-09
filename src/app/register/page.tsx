@@ -25,9 +25,16 @@ export default function Register() {
       toast("User has been created Go to Login Page");
       setUsername("");
       setPassword("");
-    } catch (err: any) {
+    } catch (err: unknown) {
+      let message = "Login failed";
+
+      if (err instanceof Error) {
+        message = err.message;
+      } else if (typeof err === "string") {
+        message = err;
+      }
+
       console.error(err);
-      setError(err || "Login failed");
     } finally {
       setLoading(false);
     }

@@ -6,16 +6,16 @@ import (
 	"notes-app/internal/repository"
 )
 
-func GetAllNotesService(db *sql.DB, limit int, page int) ([]models.Note, error) {
-	return repository.GetAllNotes(db, limit, page)
+func GetAllNotesService(db *sql.DB, title string, limit int, page int) ([]models.Note, error) {
+	return repository.GetAllNotes(db, title, limit, page)
+}
+
+func GetNotesByUserIDService(db *sql.DB, id string, title string, limit int, page int) ([]models.Note, error) {
+	return repository.GetNotesByUserID(db, id, title, limit, page)
 }
 
 func CreateNoteService(db *sql.DB, note models.Note) (string, error) {
 	return repository.CreateNote(db, note)
-}
-
-func GetNotesByUserIDService(db *sql.DB, id string, limit int, page int) ([]models.Note, error) {
-	return repository.GetNotesByUserID(db, id, limit, page)
 }
 
 func GetNoteService(db *sql.DB, id string) (models.Note, error) {

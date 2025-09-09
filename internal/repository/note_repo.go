@@ -29,15 +29,30 @@ func GetNoteByID(db *sql.DB, id string) (models.Note, error) {
 	return note, err
 }
 
-func GetNotesByUserID(db *sql.DB, userID string, limit, offset int) ([]models.Note, error) {
-	rows, err := db.Query(
-		`SELECT id, title, content, user_id, created_at, updated_at
-		 FROM notes 
-		 WHERE user_id = $1
-		 ORDER BY created_at DESC
-		 LIMIT $2 OFFSET $3`,
-		userID, limit, offset,
-	)
+func GetNotesByUserID(db *sql.DB, userID, title string, limit, offset int) ([]models.Note, error) {
+	var rows *sql.Rows
+	var err error
+
+	if title != "" {
+		query := `
+			SELECT id, title, content, user_id, created_at, updated_at
+			FROM notes
+			WHERE user_id = $1 AND title ILIKE $2
+			ORDER BY created_at DESC
+			LIMIT $3 OFFSET $4
+		`
+		rows, err = db.Query(query, userID, "%"+title+"%", limit, offset)
+	} else {
+		query := `
+			SELECT id, title, content, user_id, created_at, updated_at
+			FROM notes
+			WHERE user_id = $1
+			ORDER BY created_at DESC
+			LIMIT $2 OFFSET $3
+		`
+		rows, err = db.Query(query, userID, limit, offset)
+	}
+
 	if err != nil {
 		return nil, err
 	}
@@ -51,30 +66,52 @@ func GetNotesByUserID(db *sql.DB, userID string, limit, offset int) ([]models.No
 		}
 		notes = append(notes, n)
 	}
+
 	return notes, nil
 }
 
 
-func GetAllNotes(db *sql.DB, limit, offset int) ([]models.Note, error) {
-	rows, err := db.Query(
-		"SELECT id, title, content, user_id, created_at, updated_at FROM notes ORDER BY created_at DESC LIMIT $1 OFFSET $2",
-		limit, offset,
-	)
-	if err != nil {
-		return nil, err
-	}
-	defer rows.Close()
 
-	var notes []models.Note
-	for rows.Next() {
-		var n models.Note
-		if err := rows.Scan(&n.ID, &n.Title, &n.Content, &n.UserID, &n.CreatedAt, &n.UpdatedAt); err != nil {
-			return nil, err
-		}
-		notes = append(notes, n)
-	}
-	return notes, nil
+func GetAllNotes(db *sql.DB, title string, limit, offset int) ([]models.Note, error) {
+    var rows *sql.Rows
+    var err error
+
+    if title != "" {
+        query := `
+            SELECT id, title, content, user_id, created_at, updated_at
+            FROM notes
+            WHERE title ILIKE $1
+            ORDER BY created_at DESC
+            LIMIT $2 OFFSET $3
+        `
+        rows, err = db.Query(query, "%" + title + "%", limit, offset)
+    } else {
+        query := `
+            SELECT id, title, content, user_id, created_at, updated_at
+            FROM notes
+            ORDER BY created_at DESC
+            LIMIT $1 OFFSET $2
+        `
+        rows, err = db.Query(query, limit, offset)
+    }
+
+    if err != nil {
+        return nil, err
+    }
+    defer rows.Close()
+
+    var notes []models.Note
+    for rows.Next() {
+        var n models.Note
+        if err := rows.Scan(&n.ID, &n.Title, &n.Content, &n.UserID, &n.CreatedAt, &n.UpdatedAt); err != nil {
+            return nil, err
+        }
+        notes = append(notes, n)
+    }
+
+    return notes, nil
 }
+
 
 func UpdateNote(db *sql.DB, note models.Note) error {
 	_, err := db.Exec(

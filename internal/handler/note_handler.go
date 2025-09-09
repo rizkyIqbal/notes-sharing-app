@@ -38,6 +38,7 @@ func NotesRouter(db *sql.DB) *mux.Router {
 
 func GetAllNotesHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		title := r.URL.Query().Get("title")  
 		pageStr := r.URL.Query().Get("page")
 		limitStr := r.URL.Query().Get("limit")
 
@@ -61,7 +62,7 @@ func GetAllNotesHandler(db *sql.DB) http.HandlerFunc {
 
 		offset := (page - 1) * limit
 
-		notes, err := service.GetAllNotesService(db, limit, offset)
+		notes, err := service.GetAllNotesService(db, title, limit, offset)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]interface{}{
@@ -110,7 +111,7 @@ func GetNotesByUserIDHandler(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		// Parse pagination params
+		title := r.URL.Query().Get("title")  
 		pageStr := r.URL.Query().Get("page")
 		limitStr := r.URL.Query().Get("limit")
 
@@ -134,7 +135,7 @@ func GetNotesByUserIDHandler(db *sql.DB) http.HandlerFunc {
 
 		offset := (page - 1) * limit
 
-		notes, err := service.GetNotesByUserIDService(db, userID, limit, offset)
+		notes, err := service.GetNotesByUserIDService(db, userID, title, limit, offset)
 		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			json.NewEncoder(w).Encode(map[string]interface{}{

@@ -1,0 +1,47 @@
+# Binaries
+/bin/
+/build/
+/dist/
+
+# Go specific
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+# Dependency directories
+/vendor/
+
+# IDE/editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# JWT keys directory
+/keys/
+
+
+# Node.js (if you have any frontend in same repo)
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn-debug.log
+
+# Misc
+*.tmp

@@ -5,12 +5,12 @@ services:
     build:
       context: ./notes-sharing-app-fe
       dockerfile: Dockerfile
-    container_name: notes-sharing-app-bee
+    container_name: notes-sharing-app-fe
     ports:
       - "3000:3000"
     # environment:
     #   - NEXT_PUBLIC_API_URL=http://backend:4000
-    # commands : "npm start"    
+    # commands : "npm start"
     depends_on:
       - backend
     networks:
@@ -20,12 +20,12 @@ services:
     build:
       context: ./notes-sharing-app-be
       dockerfile: Dockerfile
-    container_name: notes-sharing-app-bee
+    container_name: notes-sharing-app-be
     ports:
       - "4000:4000"
     # environment:
     #   - DATABASE_URL=postgres://postgres:postgres@db:5432/mydb?sslmode=disable
-    # commands : "go run cmd/server/main.go"    
+    # commands : "go run cmd/server/main.go"
     depends_on:
       - db
     networks:

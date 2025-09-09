@@ -4,7 +4,7 @@ import { Input } from "@/components/ui/input";
 import { NotesCard } from "@/components/visitor/notes-card";
 import { useEffect, useState } from "react";
 import { Note } from "@/types/note";
-import { fetchNotes } from "@/helper/notes.helper";
+import { fetchNotesByUserID, fetchNotes } from "@/helper/notes.helper";
 
 import {
   Pagination,
@@ -16,8 +16,9 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import Link from "next/link";
+import { Button } from "@/components/ui/button";
 
-export default function Home() {
+export default function MyNotes() {
   const [notes, setNotes] = useState<Note[]>([]);
   const [page, setPage] = useState(1);
   const [limit] = useState(8);
@@ -26,7 +27,7 @@ export default function Home() {
   useEffect(() => {
     async function loadNotes() {
       try {
-        const data = await fetchNotes(setNotes, page, limit);
+        const data = await fetchNotesByUserID(setNotes, page, limit);
         if (data?.total) {
           setTotalPages(Math.ceil(data.total / limit));
         }
@@ -35,7 +36,6 @@ export default function Home() {
       }
     }
     loadNotes();
-    console.log(notes);
   }, [page]);
 
   const handlePageClick = (newPage: number) => {
@@ -47,14 +47,17 @@ export default function Home() {
     <div className="font-sans min-h-screen p-8 w-full">
       {/* <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start"> */}
       <main className="">
-        <p className="text-3xl">Home</p>
-        <div className="mt-4">
+        <p className="text-3xl">My Notes</p>
+        <div className="mt-4 flex gap-4">
           <Input
             type="text"
             id="search"
             placeholder="Search Note"
             className="w-64"
           />
+          <Link href={`/note/create`}>
+            <Button>Add Note</Button>
+          </Link>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-10 gap-4 min-w-full">
           {notes && notes.length > 0 ? (
@@ -83,7 +86,6 @@ export default function Home() {
                   />
                 </PaginationItem>
 
-                {/* Generate page links dynamically */}
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map(
                   (p) => (
                     <PaginationItem key={p}>

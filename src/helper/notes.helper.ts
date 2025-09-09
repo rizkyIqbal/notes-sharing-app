@@ -4,7 +4,8 @@ import type { Note } from "@/types/note";
 export async function fetchNotes(
   setNotes: (notes: Note[]) => void,
   page = 1,
-  limit = 8
+  limit = 8,
+  title = ""
 ): Promise<{
   notes: Note[];
   total: number;
@@ -12,7 +13,7 @@ export async function fetchNotes(
   limit: number;
 } | null> {
   try {
-    const data = await noteService.getNotes(page, limit);
+    const data = await noteService.getNotes(page, limit, title);
 
     const result = {
       notes: data.data?.notes || [],
@@ -48,7 +49,8 @@ export async function fetchNoteByID(
 export async function fetchNotesByUserID(
   setNotes: (notes: Note[]) => void,
   page = 1,
-  limit = 8
+  limit = 8,
+  title = ""
 ): Promise<{
   notes: Note[];
   total: number;
@@ -56,7 +58,7 @@ export async function fetchNotesByUserID(
   limit: number;
 } | null> {
   try {
-    const response = await noteService.getNoteByUserID(page, limit);
+    const response = await noteService.getNoteByUserID(page, limit, title);
     const {
       notes,
       total,

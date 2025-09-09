@@ -21,29 +21,29 @@ export default function Home() {
   const [page, setPage] = useState(1);
   const [limit] = useState(8);
   const [totalPages, setTotalPages] = useState<number>(1);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    async function loadNotes() {
+    const delayDebounce = setTimeout(async () => {
       try {
-        const data = await fetchNotes(setNotes, page, limit);
+        const data = await fetchNotes(setNotes, page, limit, search);
         if (data?.total) {
           setTotalPages(Math.ceil(data.total / limit));
         }
       } catch (error) {
         console.error(error);
       }
-    }
-    loadNotes();
-  }, [page, limit]);
+    }, 300); // 300ms debounce
+
+    return () => clearTimeout(delayDebounce);
+  }, [page, limit, search]);
 
   const handlePageClick = (newPage: number) => {
     setPage(newPage);
   };
 
   return (
-    // <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
     <div className="font-sans min-h-screen p-8 w-full">
-      {/* <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start"> */}
       <main className="">
         <p className="text-3xl">Home</p>
         <div className="mt-4">
@@ -52,6 +52,8 @@ export default function Home() {
             id="search"
             placeholder="Search Note"
             className="w-64"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 mt-10 gap-4 min-w-full">

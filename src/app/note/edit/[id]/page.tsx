@@ -209,7 +209,6 @@ export default function UpdateNote() {
           </Button>
         </form>
 
-        {/* Images Section */}
         <div>
           <p className="text-lg font-medium">Images</p>
           <p className="text-sm text-gray-500">*Click to delete images</p>

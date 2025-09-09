@@ -2,9 +2,9 @@ import { NotesResponse, NoteResponse } from "@/types/note";
 import api from "./api";
 
 export const noteService = {
-  async getNotes(page = 1, limit = 8): Promise<NotesResponse> {
+  async getNotes(page = 1, limit = 8, title = ""): Promise<NotesResponse> {
     const response = await api.get<NotesResponse>("/notes", {
-      params: { page, limit },
+      params: { page, limit, title },
     });
     return response.data;
   },
@@ -14,9 +14,9 @@ export const noteService = {
     return response.data;
   },
 
-  async getNoteByUserID(page = 1, limit = 8): Promise<NotesResponse> {
+  async getNoteByUserID(page = 1, limit = 8, title = ""): Promise<NotesResponse> {
     const response = await api.get<NotesResponse>(`/notes/user`, {
-      params: { page, limit },
+      params: { page, limit, title },
       withCredentials: true,
     });
     return response.data;
